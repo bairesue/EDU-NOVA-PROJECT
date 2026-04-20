@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDU NOVA — Learn Through Play</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0D1B3E;
+    --navy2: #162350;
+    --gold: #F5C842;
+    --gold2: #FFD966;
+    --coral: #FF6B6B;
+    --teal: #2EC4B6;
+    --purple: #7B5EA7;
+    --green: #34C759;
+    --bg: #F0F4FF;
+    --white: #FFFFFF;
+    --text: #1A1A2E;
+    --text-muted: #6B7280;
+    --radius: 16px;
+    --radius-lg: 24px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    background: var(--navy);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+  .logo {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.7rem;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+  .logo span { color: var(--white); }
+  .nav-links { display: flex; gap: 0.5rem; }
+  .nav-links button {
+    background: transparent;
+    border: none;
+    color: #aaa;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .nav-links button.active, .nav-links button:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--white);
+  }
+  .nav-right { display: flex; gap: 0.75rem; align-items: center; }
+  .stars-badge {
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 800;
+    font-size: 0.85rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* ===== PAGES ===== */
+  .page { display: none; animation: fadeIn 0.3s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 50%, #1a2a6e 100%);
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 20% 50%, rgba(245,200,66,0.1) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(46,196,182,0.1) 0%, transparent 50%);
+  }
+  .hero-tag {
+    display: inline-block;
+    background: rgba(245,200,66,0.15);
+    border: 1px solid rgba(245,200,66,0.4);
+    color: var(--gold);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 em { color: var(--gold); font-style: normal; }
+  .hero p {
+    color: rgba(255,255,255,0.7);
+    font-size: 1.15rem;
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+  }
+  .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--navy);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 14px 28px;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(245,200,66,0.4);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,200,66,0.5); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--white);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 13px 28px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+
+  .stats-strip {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Fredoka One', cursive; font-size: 2rem; color: var(--gold); }
+  .stat-label { color: rgba(255,255,255,0.6); font-size: 0.85rem; font-weight: 600; }
+
+  /* ===== GAMES GRID ===== */
+  .section { padding: 4rem 2rem; max-width: 1100px; margin: 0 auto; }
+  .section-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--navy);
+  }
+  .section-sub { color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1rem; }
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  .game-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  .game-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+  }
+  .game-card.flashcard::before { background: var(--coral); }
+  .game-card.puzzle::before { background: var(--teal); }
+  .game-card.quiz::before { background: var(--purple); }
+  .game-card.memory::before { background: var(--green); }
+  .game-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+    border-color: var(--gold);
+  }
+  .game-icon {
+    width: 60px; height: 60px;
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+    margin-bottom: 1.25rem;
+  }
+  .game-card.flashcard .game-icon { background: #FFF0F0; }
+  .game-card.puzzle .game-icon { background: #E8FFFE; }
+  .game-card.quiz .game-icon { background: #F3EEFF; }
+  .game-card.memory .game-icon { background: #EFFFEE; }
+  .game-title { font-family: 'Fredoka One', cursive; font-size: 1.25rem; margin-bottom: 0.5rem; }
+  .game-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.25rem; }
+  .game-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+  .badge-xp { background: #FFF9E6; color: #B8860B; }
+  .play-btn {
+    float: right;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .play-btn:hover { background: var(--purple); }
+
+  /* ===== FLASHCARD PAGE ===== */
+  .game-header {
+    background: var(--navy);
+    padding: 1.5rem 2rem;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .back-btn {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: var(--white);
+    padding: 8px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.2); }
+  .game-header h2 { font-family: 'Fredoka One', cursive; font-size: 1.4rem; }
+  .progress-bar-wrap {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-left: 1rem;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 10px;
+    transition: width 0.4s ease;
+  }
+
+  .flashcard-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    min-height: 60vh;
+  }
+  .topic-tabs {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;
+    margin-bottom: 2rem;
+  }
+  .topic-tab {
+    background: var(--white);
+    border: 2px solid #e5e7eb;
+    color: var(--text-muted);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 7px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .topic-tab.active {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+  }
+
+  .flashcard-container {
+    perspective: 1000px;
+    width: min(480px, 92vw);
+    height: 280px;
+    margin-bottom: 2rem;
+    cursor: pointer;
+  }
+  .flashcard-inner {
+    position: relative;
+    width: 100%; height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+  }
+  .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
+  .flashcard-face {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem;
+    text-align: center;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+  }
+  .flashcard-front {
+    background: var(--navy);
+    color: var(--white);
+  }
+  .flashcard-front .card-label {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 1rem;
+  }
+  .flashcard-front .card-question {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.5rem;
+    line-height: 1.4;
+  }
+  .flashcard-back {
+    background: var(--gold);
+    color: var(--navy);
+    transform: rotateY(180deg);
+  }
+  .flashcard-back .card-label {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--navy); opacity: 0.6; margin-bottom: 1rem;
+  }
+  .flashcard-back .card-answer {
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.6;
+  }
+  .flashcard-back .card-fun {
+    font-size: 0.85rem; margin-top: 0.75rem; opacity: 0.7;
+  }
+  .flip-hint {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .fc-controls { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+  .fc-btn {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .fc-btn.wrong { background: #FFF0F0; color: var(--coral); }
+  .fc-btn.correct { background: #EFFFEE; color: var(--green); }
+  .fc-btn.next { background: var(--navy); color: var(--white); }
+  .fc-btn:hover { transform: scale(1.04); }
+  .fc-counter { color: var(--text-muted); font-size: 0.9rem; font-weight: 600; text-align: center; margin-top: 1rem; }
+
+  /* ===== QUIZ PAGE ===== */
+  .quiz-area {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+  .quiz-question-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    margin-bottom: 1.5rem;
+  }
+  .quiz-num { color: var(--text-muted); font-size: 0.8rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; }
+  .quiz-q { font-family: 'Fredoka One', cursive; font-size: 1.5rem; color: var(--navy); line-height: 1.4; }
+  .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .quiz-option {
+    background: var(--white);
+    border: 2.5px solid #e5e7eb;
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text);
+  }
+  .quiz-option:hover { border-color: var(--purple); background: #F8F5FF; }
+  .quiz-option.selected { border-color: var(--purple); background: #F3EEFF; }
+  .quiz-option.correct { border-color: var(--green); background: #EFFFEE; color: #1a6b2a; }
+  .quiz-option.wrong { border-color: var(--coral); background: #FFF0F0; color: #b52020; }
+  .quiz-option:disabled { cursor: default; }
+  .quiz-btn {
+    display: block;
+    width: 100%;
+    background: var(--purple);
+    color: var(--white);
+    border: none;
+    padding: 14px;
+    border-radius: var(--radius);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: all 0.2s;
+  }
+  .quiz-btn:hover { background: #6448a0; }
+  .quiz-btn:disabled { opacity: 0.4; cursor: default; }
+  .quiz-feedback {
+    text-align: center;
+    padding: 1rem;
+    font-weight: 700;
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
+  }
+  .quiz-feedback.correct-fb { background: #EFFFEE; color: #1a6b2a; }
+  .quiz-feedback.wrong-fb { background: #FFF0F0; color: #b52020; }
+
+  /* ===== WORD PUZZLE ===== */
+  .puzzle-area {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+  .puzzle-header-info {
+    display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;
+  }
+  .puzzle-info-box {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 0.75rem 1.5rem;
+    text-align: center;
+    flex: 1;
+    min-width: 100px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .puzzle-info-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); }
+  .puzzle-info-val { font-family: 'Fredoka One', cursive; font-size: 1.4rem; color: var(--navy); margin-top: 2px; }
+  .word-display {
+    display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+  .letter-box {
+    width: 52px; height: 60px;
+    background: var(--white);
+    border: 3px solid #D1D5DB;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.6rem;
+    color: var(--navy);
+    transition: all 0.2s;
+  }
+  .letter-box.filled { border-color: var(--teal); background: #E8FFFE; }
+  .letter-box.correct { border-color: var(--green); background: #EFFFEE; }
+  .letter-box.wrong { border-color: var(--coral); background: #FFF0F0; }
+  .scrambled-hint {
+    background: #FFFBEE;
+    border: 2px dashed var(--gold);
+    border-radius: var(--radius);
+    padding: 1rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .scrambled-hint label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 0.5rem; }
+  .scrambled-hint .clue { font-family: 'Fredoka One', cursive; font-size: 1.1rem; color: var(--navy); }
+  .keyboard-wrap {
+    display: flex; flex-direction: column; gap: 0.5rem; align-items: center;
+  }
+  .keyboard-row { display: flex; gap: 0.4rem; flex-wrap: wrap; justify-content: center; }
+  .key-btn {
+    min-width: 38px; height: 44px; padding: 0 8px;
+    background: var(--white);
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text);
+  }
+  .key-btn:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+  .key-btn.used { opacity: 0.3; pointer-events: none; }
+  .key-delete {
+    min-width: 60px; background: #FFF0F0; color: var(--coral); border-color: var(--coral);
+  }
+  .puzzle-submit {
+    margin-top: 1.5rem;
+    width: 100%;
+    background: var(--teal);
+    color: var(--white);
+    border: none;
+    padding: 14px;
+    border-radius: var(--radius);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .puzzle-submit:hover { background: #28a99a; }
+
+  /* ===== MEMORY GAME ===== */
+  .memory-area {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+  .memory-topic-select {
+    display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem; justify-content: center;
+  }
+  .memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+  }
+  .mem-card {
+    aspect-ratio: 1;
+    border-radius: var(--radius);
+    cursor: pointer;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+  }
+  .mem-card.flipped { transform: rotateY(180deg); }
+  .mem-card.matched { transform: rotateY(180deg); opacity: 0.7; cursor: default; }
+  .mem-face {
+    position: absolute; inset: 0;
+    border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    font-size: 1.5rem;
+    font-weight: 800;
+  }
+  .mem-back-face {
+    background: var(--navy);
+    border: 3px solid rgba(255,255,255,0.1);
+    font-size: 1.5rem;
+    color: rgba(255,255,255,0.3);
+  }
+  .mem-front-face {
+    background: var(--white);
+    border: 3px solid var(--gold);
+    transform: rotateY(180deg);
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 0.5rem;
+    color: var(--navy);
+    line-height: 1.3;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .mem-emoji { font-size: 1.4rem; }
+  .mem-front-face.matched-face { background: #EFFFEE; border-color: var(--green); }
+  .mem-stats-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  .mem-moves { font-family: 'Fredoka One', cursive; font-size: 1.2rem; color: var(--navy); }
+  .mem-matches { font-size: 0.9rem; font-weight: 700; color: var(--text-muted); }
+  .mem-restart {
+    background: var(--navy); color: var(--white);
+    border: none; padding: 8px 18px; border-radius: 10px;
+    font-family: 'Nunito', sans-serif; font-weight: 700;
+    font-size: 0.85rem; cursor: pointer;
+  }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-10px);
+    background: var(--navy); color: var(--white);
+    padding: 10px 24px; border-radius: 30px;
+    font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.95rem;
+    z-index: 999; opacity: 0; transition: all 0.3s;
+    pointer-events: none; white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ===== LEADERBOARD ===== */
+  .leaderboard { max-width: 700px; margin: 0 auto; padding: 3rem 1.5rem; }
+  .lb-table { background: var(--white); border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
+  .lb-row {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.15s;
+  }
+  .lb-row:last-child { border-bottom: none; }
+  .lb-row:hover { background: #f9f9f9; }
+  .lb-rank { font-family: 'Fredoka One', cursive; font-size: 1.3rem; width: 36px; text-align: center; }
+  .lb-rank.gold { color: var(--gold); }
+  .lb-rank.silver { color: #aaa; }
+  .lb-rank.bronze { color: #cd7f32; }
+  .lb-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; font-weight: 800; flex-shrink: 0;
+  }
+  .lb-name { font-weight: 700; flex: 1; }
+  .lb-sub { font-size: 0.8rem; color: var(--text-muted); }
+  .lb-stars { font-weight: 800; color: var(--navy); display: flex; align-items: center; gap: 4px; }
+
+  /* ===== WIN MODAL ===== */
+  .win-overlay {
+    position: fixed; inset: 0;
+    background: rgba(13,27,62,0.85);
+    z-index: 200;
+    display: none; align-items: center; justify-content: center;
+  }
+  .win-overlay.show { display: flex; }
+  .win-modal {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 3rem;
+    text-align: center;
+    max-width: 420px;
+    width: 90%;
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes popIn {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .win-emoji { font-size: 4rem; margin-bottom: 1rem; }
+  .win-title { font-family: 'Fredoka One', cursive; font-size: 2rem; color: var(--navy); margin-bottom: 0.5rem; }
+  .win-msg { color: var(--text-muted); margin-bottom: 1.5rem; }
+  .win-stars { font-family: 'Fredoka One', cursive; font-size: 1.5rem; color: var(--gold); margin-bottom: 1.5rem; }
+  .win-btns { display: flex; gap: 0.75rem; justify-content: center; }
+  .win-btn {
+    padding: 12px 22px; border-radius: var(--radius);
+    font-family: 'Nunito', sans-serif; font-weight: 800;
+    font-size: 0.95rem; cursor: pointer; border: none; transition: all 0.2s;
+  }
+  .win-btn.primary { background: var(--gold); color: var(--navy); }
+  .win-btn.secondary { background: #f0f0f0; color: var(--text); }
+  .win-btn:hover { transform: scale(1.04); }
+
+  @media (max-width: 560px) {
+    .quiz-options { grid-template-columns: 1fr; }
+    .memory-grid { grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+    .nav-links { display: none; }
+    .stats-strip { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">EDU<span>NOVA</span></div>
+  <div class="nav-links">
+    <button class="active" onclick="showPage('home', this)">🏠 Home</button>
+    <button onclick="showPage('flashcards', this)">🃏 Flashcards</button>
+    <button onclick="showPage('quiz', this)">🧠 Quiz</button>
+    <button onclick="showPage('puzzle', this)">🔤 Puzzle</button>
+    <button onclick="showPage('memory', this)">🎴 Memory</button>
+    <button onclick="showPage('leaderboard', this)">🏆 Leaderboard</button>
+  </div>
+  <div class="nav-right">
+    <div class="stars-badge">⭐ <span id="total-stars">0</span></div>
+  </div>
+</nav>
+
+<!-- ===== HOME PAGE ===== -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-tag">✨ Learn. Play. Grow.</div>
+    <h1>Make Learning <em>Epic</em> with<br>EDU NOVA</h1>
+    <p>Explore subjects through flashcards, quizzes, puzzles, and memory games. Every correct answer earns you stars!</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showPage('flashcards', document.querySelector('.nav-links button:nth-child(2)'))">🚀 Start Playing</button>
+      <button class="btn-secondary" onclick="showPage('leaderboard', document.querySelector('.nav-links button:nth-child(6)'))">🏆 Leaderboard</button>
+    </div>
+    <div class="stats-strip">
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Fun Games</div></div>
+      <div class="stat"><div class="stat-num">60+</div><div class="stat-label">Questions</div></div>
+      <div class="stat"><div class="stat-num">5</div><div class="stat-label">Subjects</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🎮 Choose Your Game</div>
+    <div class="section-sub">Pick any game below and start earning stars!</div>
+    <div class="games-grid">
+      <div class="game-card flashcard" onclick="showPage('flashcards', document.querySelector('.nav-links button:nth-child(2)'))">
+        <div class="game-icon">🃏</div>
+        <div class="game-title">Flashcards</div>
+        <div class="game-desc">Flip through cards to master key concepts in Science, Math, History and more.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <span class="game-badge badge-xp">⭐ +10 per card</span>
+          <button class="play-btn">Play →</button>
+        </div>
+      </div>
+      <div class="game-card quiz" onclick="showPage('quiz', document.querySelector('.nav-links button:nth-child(3)'))">
+        <div class="game-icon">🧠</div>
+        <div class="game-title">Quick Quiz</div>
+        <div class="game-desc">Answer multiple-choice questions against the clock. Test what you know!</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <span class="game-badge badge-xp">⭐ +20 per correct</span>
+          <button class="play-btn">Play →</button>
+        </div>
+      </div>
+      <div class="game-card puzzle" onclick="showPage('puzzle', document.querySelector('.nav-links button:nth-child(4)'))">
+        <div class="game-icon">🔤</div>
+        <div class="game-title">Word Puzzle</div>
+        <div class="game-desc">Unscramble vocabulary words using the on-screen keyboard. Can you decode them all?</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <span class="game-badge badge-xp">⭐ +25 per word</span>
+          <button class="play-btn">Play →</button>
+        </div>
+      </div>
+      <div class="game-card memory" onclick="showPage('memory', document.querySelector('.nav-links button:nth-child(5)'))">
+        <div class="game-icon">🎴</div>
+        <div class="game-title">Memory Match</div>
+        <div class="game-desc">Match pairs of words and definitions. Train your brain with this classic game!</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <span class="game-badge badge-xp">⭐ +15 per match</span>
+          <button class="play-btn">Play →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FLASHCARDS PAGE ===== -->
+<div class="page" id="page-flashcards">
+  <div class="game-header">
+    <button class="back-btn" onclick="showPage('home', document.querySelector('.nav-links button'))">← Back</button>
+    <h2>🃏 Flashcards</h2>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="fc-progress" style="width:0%"></div>
+    </div>
+    <div style="color:var(--gold);font-weight:800;font-size:0.9rem;white-space:nowrap;margin-left:0.5rem;" id="fc-score">⭐ 0</div>
+  </div>
+  <div class="flashcard-area">
+    <div class="topic-tabs" id="fc-topic-tabs"></div>
+    <div class="flashcard-container" id="flashcard" onclick="flipCard()">
+      <div class="flashcard-inner">
+        <div class="flashcard-face flashcard-front">
+          <div class="card-label">Question</div>
+          <div class="card-question" id="fc-question">Loading...</div>
+        </div>
+        <div class="flashcard-face flashcard-back">
+          <div class="card-label">Answer</div>
+          <div class="card-answer" id="fc-answer"></div>
+          <div class="card-fun" id="fc-fun"></div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-hint">👆 Click card to reveal answer</div>
+    <div class="fc-controls">
+      <button class="fc-btn wrong" onclick="fcResult(false)">✗ Still Learning</button>
+      <button class="fc-btn next" onclick="fcNext()">Skip →</button>
+      <button class="fc-btn correct" onclick="fcResult(true)">✓ Got It!</button>
+    </div>
+    <div class="fc-counter" id="fc-counter">Card 1 of 1</div>
+  </div>
+</div>
+
+<!-- ===== QUIZ PAGE ===== -->
+<div class="page" id="page-quiz">
+  <div class="game-header">
+    <button class="back-btn" onclick="showPage('home', document.querySelector('.nav-links button'))">← Back</button>
+    <h2>🧠 Quick Quiz</h2>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="quiz-progress" style="width:0%"></div>
+    </div>
+    <div style="color:var(--gold);font-weight:800;font-size:0.9rem;white-space:nowrap;margin-left:0.5rem;" id="quiz-score-display">⭐ 0</div>
+  </div>
+  <div class="quiz-area">
+    <div id="quiz-feedback" class="quiz-feedback" style="display:none"></div>
+    <div class="quiz-question-card">
+      <div class="quiz-num" id="quiz-num">Question 1 of 10</div>
+      <div class="quiz-q" id="quiz-q">Loading...</div>
+    </div>
+    <div class="quiz-options" id="quiz-options"></div>
+    <button class="quiz-btn" id="quiz-next-btn" disabled onclick="quizNext()">Next Question →</button>
+  </div>
+</div>
+
+<!-- ===== WORD PUZZLE PAGE ===== -->
+<div class="page" id="page-puzzle">
+  <div class="game-header">
+    <button class="back-btn" onclick="showPage('home', document.querySelector('.nav-links button'))">← Back</button>
+    <h2>🔤 Word Puzzle</h2>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="pz-progress" style="width:0%"></div>
+    </div>
+    <div style="color:var(--gold);font-weight:800;font-size:0.9rem;white-space:nowrap;margin-left:0.5rem;" id="pz-score-display">⭐ 0</div>
+  </div>
+  <div class="puzzle-area">
+    <div class="puzzle-header-info">
+      <div class="puzzle-info-box"><div class="puzzle-info-label">Round</div><div class="puzzle-info-val" id="pz-round">1/8</div></div>
+      <div class="puzzle-info-box"><div class="puzzle-info-label">Stars</div><div class="puzzle-info-val" id="pz-stars">0 ⭐</div></div>
+      <div class="puzzle-info-box"><div class="puzzle-info-label">Attempts</div><div class="puzzle-info-val" id="pz-attempts">3 ❤️</div></div>
+    </div>
+    <div class="scrambled-hint">
+      <label>CLUE</label>
+      <div class="clue" id="pz-clue">Loading...</div>
+    </div>
+    <div class="word-display" id="pz-word-display"></div>
+    <div class="keyboard-wrap" id="pz-keyboard"></div>
+    <button class="puzzle-submit" onclick="pzSubmit()">Check Answer ✓</button>
+  </div>
+</div>
+
+<!-- ===== MEMORY GAME PAGE ===== -->
+<div class="page" id="page-memory">
+  <div class="game-header">
+    <button class="back-btn" onclick="showPage('home', document.querySelector('.nav-links button'))">← Back</button>
+    <h2>🎴 Memory Match</h2>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="mem-progress" style="width:0%"></div>
+    </div>
+    <div style="color:var(--gold);font-weight:800;font-size:0.9rem;white-space:nowrap;margin-left:0.5rem;" id="mem-score-display">⭐ 0</div>
+  </div>
+  <div class="memory-area">
+    <div class="memory-topic-select" id="mem-topic-select"></div>
+    <div class="mem-stats-bar">
+      <div class="mem-moves">👆 <span id="mem-moves">0</span> moves</div>
+      <div class="mem-matches">Matched: <span id="mem-matched">0</span>/8</div>
+      <button class="mem-restart" onclick="initMemory()">🔄 Restart</button>
+    </div>
+    <div class="memory-grid" id="memory-grid"></div>
+  </div>
+</div>
+
+<!-- ===== LEADERBOARD PAGE ===== -->
+<div class="page" id="page-leaderboard">
+  <div class="section leaderboard">
+    <div class="section-title">🏆 Leaderboard</div>
+    <div class="section-sub">Top learners this week</div>
+    <div class="lb-table" id="lb-table"></div>
+  </div>
+</div>
+
+<!-- Win Modal -->
+<div class="win-overlay" id="win-overlay">
+  <div class="win-modal">
+    <div class="win-emoji" id="win-emoji">🎉</div>
+    <div class="win-title" id="win-title">Well Done!</div>
+    <div class="win-msg" id="win-msg">You completed the challenge!</div>
+    <div class="win-stars" id="win-stars">+30 ⭐</div>
+    <div class="win-btns">
+      <button class="win-btn primary" onclick="closeWin(); window.winCallback && winCallback()">Play Again 🔄</button>
+      <button class="win-btn secondary" onclick="closeWin(); showPage('home', document.querySelector('.nav-links button'))">Home 🏠</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== DATA =====
+const flashcardData = {
+  Science: [
+    { q: "What is the powerhouse of the cell?", a: "Mitochondria", fun: "💡 It produces ATP, the cell's energy currency." },
+    { q: "What force keeps planets in orbit?", a: "Gravity", fun: "🍎 Newton discovered it (kind of) from an apple!" },
+    { q: "What is H₂O?", a: "Water", fun: "💧 Two hydrogen atoms bonded to one oxygen atom." },
+    { q: "What is the largest organ in the human body?", a: "The Skin", fun: "🧴 It covers about 2 square meters in adults!" },
+    { q: "How many bones are in the adult human body?", a: "206 bones", fun: "👶 Babies start with ~270!" },
+    { q: "What gas do plants absorb during photosynthesis?", a: "Carbon Dioxide (CO₂)", fun: "🌿 They release oxygen in return — lucky us!" },
+  ],
+  Math: [
+    { q: "What is π (Pi) approximately equal to?", a: "3.14159…", fun: "🥧 It goes on forever — it's irrational!" },
+    { q: "What is the square root of 144?", a: "12", fun: "✏️ Because 12 × 12 = 144." },
+    { q: "What is the Pythagorean theorem?", a: "a² + b² = c²", fun: "📐 Only works for right-angled triangles." },
+    { q: "What is 15% of 200?", a: "30", fun: "💡 15% = 15/100, so 200 × 0.15 = 30." },
+    { q: "What is a prime number?", a: "A number divisible only by 1 and itself", fun: "🔢 2 is the only even prime!" },
+  ],
+  History: [
+    { q: "In what year did World War II end?", a: "1945", fun: "🕊️ V-E Day was May 8, V-J Day was Aug 15." },
+    { q: "Who was the first US President?", a: "George Washington", fun: "🎩 He took office in 1789." },
+    { q: "What ancient wonder was in Alexandria?", a: "The Great Library / Lighthouse", fun: "📚 A center of knowledge in the ancient world." },
+    { q: "Who invented the printing press (~1440)?", a: "Johannes Gutenberg", fun: "📖 It transformed how knowledge spread." },
+    { q: "What empire was Julius Caesar part of?", a: "The Roman Empire", fun: "🏛️ 'Et tu, Brutè?' — Shakespeare." },
+  ],
+  Geography: [
+    { q: "What is the capital of Kenya?", a: "Nairobi", fun: "🦁 Home of Nairobi National Park!" },
+    { q: "What is the longest river in the world?", a: "The Nile", fun: "🐊 Flows through 11 African countries." },
+    { q: "What is the largest continent?", a: "Asia", fun: "🌏 It covers 44 million km²." },
+    { q: "What ocean is the largest?", a: "The Pacific Ocean", fun: "🌊 Larger than all land combined!" },
+    { q: "On which continent is the Sahara Desert?", a: "Africa", fun: "🏜️ It's the world's largest hot desert." },
+  ],
+  English: [
+    { q: "What is a synonym?", a: "A word with a similar meaning to another", fun: "📝 Happy & joyful are synonyms." },
+    { q: "What is an antonym?", a: "A word with the opposite meaning", fun: "↔️ Hot & cold are antonyms." },
+    { q: "What is a metaphor?", a: "Comparing two things without using 'like' or 'as'", fun: "🌟 'Life is a journey.'" },
+    { q: "What is an adjective?", a: "A word that describes a noun", fun: "🎨 'The blue sky' — blue is the adjective." },
+    { q: "What is the plural of 'child'?", a: "Children", fun: "👧 Irregular plural — doesn't follow the normal rule!" },
+  ]
+};
+
+const quizData = [
+  { q: "Which planet is closest to the Sun?", opts: ["Venus", "Mercury", "Mars", "Earth"], ans: 1, topic: "Science" },
+  { q: "What is 12 × 12?", opts: ["144", "132", "156", "148"], ans: 0, topic: "Math" },
+  { q: "Who wrote 'Romeo and Juliet'?", opts: ["Charles Dickens", "Jane Austen", "William Shakespeare", "Homer"], ans: 2, topic: "English" },
+  { q: "What is the chemical symbol for Gold?", opts: ["Go", "Gd", "Au", "Ag"], ans: 2, topic: "Science" },
+  { q: "What is the capital of France?", opts: ["Rome", "Berlin", "Madrid", "Paris"], ans: 3, topic: "Geography" },
+  { q: "Which is the smallest prime number?", opts: ["1", "2", "3", "5"], ans: 1, topic: "Math" },
+  { q: "In what year did the Titanic sink?", opts: ["1905", "1912", "1918", "1920"], ans: 1, topic: "History" },
+  { q: "What does DNA stand for?", opts: ["Deoxyribonucleic Acid", "Digital Nucleus Atom", "Dual Nitrogen Array", "Dense Nuclear Agent"], ans: 0, topic: "Science" },
+  { q: "Which continent is Egypt in?", opts: ["Asia", "Europe", "Africa", "Middle East"], ans: 2, topic: "Geography" },
+  { q: "What is the past tense of 'run'?", opts: ["Runned", "Ran", "Ranned", "Running"], ans: 1, topic: "English" },
+];
+
+const puzzleData = [
+  { word: "PHOTON", clue: "A particle of light (Science)" },
+  { word: "GRAVITY", clue: "Force that attracts objects with mass (Science)" },
+  { word: "FRACTION", clue: "Part of a whole — like ½ or ¾ (Math)" },
+  { word: "EQUATOR", clue: "Imaginary line around the middle of Earth (Geography)" },
+  { word: "PYRAMID", clue: "Famous ancient Egyptian structure (History)" },
+  { word: "SYNONYM", clue: "A word that means the same as another (English)" },
+  { word: "OXYGEN", clue: "Gas we breathe and plants release (Science)" },
+  { word: "DECIMAL", clue: "A number system based on tens (Math)" },
+];
+
+const memoryData = {
+  Science: [
+    { term: "🌡️ Celsius", def: "Temperature scale" },
+    { term: "⚡ Electron", def: "Negative charge particle" },
+    { term: "🧬 DNA", def: "Genetic blueprint" },
+    { term: "💧 Osmosis", def: "Water through membrane" },
+    { term: "🌿 Chlorophyll", def: "Green plant pigment" },
+    { term: "🔬 Nucleus", def: "Cell's control center" },
+    { term: "⚗️ Catalyst", def: "Speeds up reactions" },
+    { term: "🌊 Density", def: "Mass per unit volume" },
+  ],
+  Math: [
+    { term: "📐 Hypotenuse", def: "Longest triangle side" },
+    { term: "∞ Infinity", def: "Without any end" },
+    { term: "π Pi", def: "3.14159…" },
+    { term: "% Percentage", def: "Out of 100" },
+    { term: "✖ Factor", def: "Divides evenly" },
+    { term: "➗ Quotient", def: "Result of division" },
+    { term: "➕ Sum", def: "Result of addition" },
+    { term: "📈 Gradient", def: "Slope of a line" },
+  ],
+};
+
+// ===== STATE =====
+let totalStars = 0;
+let fcTopic = 'Science', fcCards = [], fcIndex = 0, fcScore = 0;
+let quizIndex = 0, quizScore = 0, quizAnswered = false;
+let pzWords = [], pzIndex = 0, pzScore = 0, pzAttempts = 3, pzCurrent = [], pzInput = [];
+let memTopic = 'Science', memCards = [], memFlipped = [], memMatched = 0, memMoves = 0, memLock = false, memScore = 0;
+let winCallback = null;
+
+const avatarColors = ['#7B5EA7','#FF6B6B','#2EC4B6','#34C759','#F5C842','#3498db','#e67e22','#e91e63'];
+const names = ['Alex K.','Priya M.','Sam O.','Zara H.','Leo T.','Nina B.','Kwame D.','Fatima A.'];
+
+// ===== UTILS =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function addStars(n) {
+  totalStars += n;
+  document.getElementById('total-stars').textContent = totalStars;
+}
+
+function showWin(emoji, title, msg, stars, cb) {
+  document.getElementById('win-emoji').textContent = emoji;
+  document.getElementById('win-title').textContent = title;
+  document.getElementById('win-msg').textContent = msg;
+  document.getElementById('win-stars').textContent = '+' + stars + ' ⭐';
+  winCallback = cb;
+  document.getElementById('win-overlay').classList.add('show');
+}
+
+function closeWin() {
+  document.getElementById('win-overlay').classList.remove('show');
+}
+
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+
+  if (name === 'flashcards') initFlashcards();
+  if (name === 'quiz') initQuiz();
+  if (name === 'puzzle') initPuzzle();
+  if (name === 'memory') initMemory();
+  if (name === 'leaderboard') initLeaderboard();
+}
+
+// ===== FLASHCARDS =====
+function initFlashcards() {
+  const tabs = document.getElementById('fc-topic-tabs');
+  tabs.innerHTML = '';
+  Object.keys(flashcardData).forEach(topic => {
+    const btn = document.createElement('button');
+    btn.className = 'topic-tab' + (topic === fcTopic ? ' active' : '');
+    btn.textContent = topic;
+    btn.onclick = () => { fcTopic = topic; initFlashcards(); };
+    tabs.appendChild(btn);
+  });
+  fcCards = [...flashcardData[fcTopic]];
+  fcCards.sort(() => Math.random() - 0.5);
+  fcIndex = 0; fcScore = 0;
+  document.getElementById('fc-score').textContent = '⭐ ' + fcScore;
+  loadFCCard();
+}
+
+function loadFCCard() {
+  if (fcIndex >= fcCards.length) {
+    showWin('🎉', 'Deck Complete!', 'You went through all ' + fcCards.length + ' cards!', fcScore, initFlashcards);
+    return;
+  }
+  const card = fcCards[fcIndex];
+  document.getElementById('fc-question').textContent = card.q;
+  document.getElementById('fc-answer').textContent = card.a;
+  document.getElementById('fc-fun').textContent = card.fun || '';
+  document.getElementById('fc-counter').textContent = 'Card ' + (fcIndex + 1) + ' of ' + fcCards.length;
+  const pct = (fcIndex / fcCards.length) * 100;
+  document.getElementById('fc-progress').style.width = pct + '%';
+  document.getElementById('flashcard').classList.remove('flipped');
+}
+
+function flipCard() {
+  document.getElementById('flashcard').classList.toggle('flipped');
+}
+
+function fcResult(correct) {
+  if (correct) {
+    fcScore += 10;
+    addStars(10);
+    document.getElementById('fc-score').textContent = '⭐ ' + fcScore;
+    showToast('✓ Nice! +10 ⭐');
+  } else {
+    showToast('Keep going! You\'ll get it.');
+  }
+  fcIndex++;
+  loadFCCard();
+}
+
+function fcNext() { fcIndex++; loadFCCard(); }
+
+// ===== QUIZ =====
+function initQuiz() {
+  const shuffled = [...quizData].sort(() => Math.random() - 0.5);
+  quizData._shuffled = shuffled;
+  quizIndex = 0; quizScore = 0;
+  document.getElementById('quiz-score-display').textContent = '⭐ 0';
+  document.getElementById('quiz-feedback').style.display = 'none';
+  loadQuizQ();
+}
+
+function loadQuizQ() {
+  const qs = quizData._shuffled || quizData;
+  if (quizIndex >= qs.length) {
+    showWin('🧠', 'Quiz Complete!', 'You scored ' + quizScore + ' out of ' + (qs.length * 20) + ' possible stars!', quizScore, initQuiz);
+    return;
+  }
+  const q = qs[quizIndex];
+  document.getElementById('quiz-num').textContent = 'Question ' + (quizIndex + 1) + ' of ' + qs.length + ' • ' + q.topic;
+  document.getElementById('quiz-q').textContent = q.q;
+  document.getElementById('quiz-progress').style.width = ((quizIndex / qs.length) * 100) + '%';
+  document.getElementById('quiz-feedback').style.display = 'none';
+
+  const opts = document.getElementById('quiz-options');
+  opts.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-option';
+    btn.textContent = opt;
+    btn.onclick = () => selectQuizAnswer(i, q.ans, btn);
+    opts.appendChild(btn);
+  });
+
+  quizAnswered = false;
+  const nb = document.getElementById('quiz-next-btn');
+  nb.disabled = true;
+  nb.textContent = quizIndex === qs.length - 1 ? 'See Results 🏁' : 'Next Question →';
+}
+
+function selectQuizAnswer(chosen, correct, clickedBtn) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const opts = document.querySelectorAll('.quiz-option');
+  opts.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('quiz-feedback');
+  if (chosen === correct) {
+    clickedBtn.classList.add('correct');
+    quizScore += 20; addStars(20);
+    document.getElementById('quiz-score-display').textContent = '⭐ ' + quizScore;
+    fb.textContent = '✓ Correct! Well done! +20 ⭐';
+    fb.className = 'quiz-feedback correct-fb';
+    showToast('+20 ⭐ Correct!');
+  } else {
+    clickedBtn.classList.add('wrong');
+    opts[correct].classList.add('correct');
+    fb.textContent = '✗ Not quite — the answer was: ' + (quizData._shuffled || quizData)[quizIndex].opts[correct];
+    fb.className = 'quiz-feedback wrong-fb';
+  }
+  fb.style.display = 'block';
+  document.getElementById('quiz-next-btn').disabled = false;
+}
+
+function quizNext() {
+  quizIndex++;
+  loadQuizQ();
+}
+
+// ===== WORD PUZZLE =====
+function initPuzzle() {
+  pzWords = [...puzzleData].sort(() => Math.random() - 0.5);
+  pzIndex = 0; pzScore = 0; pzAttempts = 3;
+  document.getElementById('pz-score-display').textContent = '⭐ 0';
+  loadPzWord();
+}
+
+function loadPzWord() {
+  if (pzIndex >= pzWords.length) {
+    showWin('🔤', 'Puzzle Master!', 'You unscrambled all the words!', pzScore, initPuzzle);
+    return;
+  }
+  pzAttempts = 3;
+  pzInput = [];
+  const word = pzWords[pzIndex];
+  pzCurrent = word.word.split('');
+  document.getElementById('pz-clue').textContent = word.clue;
+  document.getElementById('pz-round').textContent = (pzIndex + 1) + '/' + pzWords.length;
+  document.getElementById('pz-stars').textContent = pzScore + ' ⭐';
+  document.getElementById('pz-attempts').textContent = pzAttempts + ' ❤️';
+  document.getElementById('pz-progress').style.width = ((pzIndex / pzWords.length) * 100) + '%';
+  renderPzWord();
+  renderKeyboard();
+}
+
+function renderPzWord() {
+  const d = document.getElementById('pz-word-display');
+  d.innerHTML = '';
+  pzCurrent.forEach((_, i) => {
+    const box = document.createElement('div');
+    box.className = 'letter-box' + (pzInput[i] ? ' filled' : '');
+    box.textContent = pzInput[i] || '';
+    d.appendChild(box);
+  });
+}
+
+function renderKeyboard() {
+  const rows = [
+    ['Q','W','E','R','T','Y','U','I','O','P'],
+    ['A','S','D','F','G','H','J','K','L'],
+    ['Z','X','C','V','B','N','M','⌫']
+  ];
+  const kb = document.getElementById('pz-keyboard');
+  kb.innerHTML = '';
+  rows.forEach(row => {
+    const r = document.createElement('div');
+    r.className = 'keyboard-row';
+    row.forEach(k => {
+      const btn = document.createElement('button');
+      btn.className = 'key-btn' + (k === '⌫' ? ' key-delete' : '');
+      btn.textContent = k;
+      btn.id = 'key-' + k;
+      btn.onclick = () => pzType(k);
+      r.appendChild(btn);
+    });
+    kb.appendChild(r);
+  });
+}
+
+function pzType(k) {
+  if (k === '⌫') {
+    pzInput.pop();
+    renderPzWord();
+    return;
+  }
+  if (pzInput.length < pzCurrent.length) {
+    pzInput.push(k);
+    renderPzWord();
+  }
+}
+
+function pzSubmit() {
+  const guess = pzInput.join('');
+  const answer = pzCurrent.join('');
+  const boxes = document.querySelectorAll('.letter-box');
+  if (guess.length < answer.length) { showToast('Fill in all letters first!'); return; }
+  if (guess === answer) {
+    boxes.forEach(b => b.classList.add('correct'));
+    const earned = 25 + (pzAttempts - 1) * 5;
+    pzScore += earned; addStars(earned);
+    document.getElementById('pz-score-display').textContent = '⭐ ' + pzScore;
+    document.getElementById('pz-stars').textContent = pzScore + ' ⭐';
+    showToast('🎉 Correct! +' + earned + ' ⭐');
+    setTimeout(() => { pzIndex++; loadPzWord(); }, 1000);
+  } else {
+    boxes.forEach(b => b.classList.add('wrong'));
+    pzAttempts--;
+    document.getElementById('pz-attempts').textContent = pzAttempts + ' ❤️';
+    if (pzAttempts <= 0) {
+      showToast('Out of attempts! The word was: ' + answer);
+      setTimeout(() => { pzIndex++; loadPzWord(); }, 1500);
+    } else {
+      showToast('✗ Not quite — ' + pzAttempts + ' attempts left!');
+      setTimeout(() => { pzInput = []; renderPzWord(); }, 700);
+    }
+  }
+}
+
+// ===== MEMORY =====
+function initMemory() {
+  const topicEl = document.getElementById('mem-topic-select');
+  if (!topicEl.children.length) {
+    Object.keys(memoryData).forEach(topic => {
+      const btn = document.createElement('button');
+      btn.className = 'topic-tab' + (topic === memTopic ? ' active' : '');
+      btn.textContent = topic;
+      btn.onclick = () => {
+        memTopic = topic;
+        document.querySelectorAll('#mem-topic-select .topic-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        initMemory();
+      };
+      topicEl.appendChild(btn);
+    });
+  }
+  memFlipped = []; memMatched = 0; memMoves = 0; memLock = false;
+  document.getElementById('mem-moves').textContent = 0;
+  document.getElementById('mem-matched').textContent = 0;
+  document.getElementById('mem-progress').style.width = '0%';
+
+  const pairs = memoryData[memTopic];
+  const allCards = [];
+  pairs.forEach((pair, i) => {
+    allCards.push({ id: i, type: 'term', content: pair.term, match: i });
+    allCards.push({ id: i + pairs.length, type: 'def', content: pair.def, match: i });
+  });
+  allCards.sort(() => Math.random() - 0.5);
+  memCards = allCards;
+
+  const grid = document.getElementById('memory-grid');
+  grid.innerHTML = '';
+  allCards.forEach((card, idx) => {
+    const el = document.createElement('div');
+    el.className = 'mem-card';
+    el.dataset.idx = idx;
+    el.innerHTML = `
+      <div class="mem-face mem-back-face">?</div>
+      <div class="mem-face mem-front-face"><span class="mem-emoji">${card.type === 'term' ? '🔑' : '📖'}</span>${card.content}</div>
+    `;
+    el.onclick = () => memFlip(idx);
+    grid.appendChild(el);
+  });
+}
+
+function memFlip(idx) {
+  if (memLock) return;
+  const el = document.querySelector(`.mem-card[data-idx="${idx}"]`);
+  if (!el || el.classList.contains('flipped') || el.classList.contains('matched')) return;
+
+  el.classList.add('flipped');
+  memFlipped.push(idx);
+
+  if (memFlipped.length === 2) {
+    memMoves++;
+    document.getElementById('mem-moves').textContent = memMoves;
+    memLock = true;
+    const [a, b] = memFlipped;
+    const ca = memCards[a], cb = memCards[b];
+    if (ca.match === cb.match && ca.type !== cb.type) {
+      // Match!
+      setTimeout(() => {
+        [a, b].forEach(i => {
+          const card = document.querySelector(`.mem-card[data-idx="${i}"]`);
+          card.classList.add('matched');
+          card.querySelector('.mem-front-face').classList.add('matched-face');
+        });
+        memMatched++;
+        memScore += 15; addStars(15);
+        document.getElementById('mem-score-display').textContent = '⭐ ' + memScore;
+        document.getElementById('mem-matched').textContent = memMatched;
+        document.getElementById('mem-progress').style.width = ((memMatched / 8) * 100) + '%';
+        showToast('✓ Match! +15 ⭐');
+        if (memMatched === 8) {
+          setTimeout(() => showWin('🎴', 'Memory Master!', 'Completed in ' + memMoves + ' moves!', memScore, initMemory), 500);
+        }
+        memFlipped = []; memLock = false;
+      }, 400);
+    } else {
+      setTimeout(() => {
+        [a, b].forEach(i => document.querySelector(`.mem-card[data-idx="${i}"]`).classList.remove('flipped'));
+        memFlipped = []; memLock = false;
+      }, 900);
+    }
+  }
+}
+
+// ===== LEADERBOARD =====
+function initLeaderboard() {
+  const scores = [totalStars + 320, 890, 740, 680, 610, 555, 430, 390]
+    .map((s, i) => ({ name: i === 0 ? 'You 🎓' : names[i], score: i === 0 ? s : s, color: avatarColors[i] }))
+    .sort((a, b) => b.score - a.score);
+
+  const table = document.getElementById('lb-table');
+  table.innerHTML = '';
+  const rankClass = ['gold', 'silver', 'bronze'];
+  scores.forEach((entry, i) => {
+    const row = document.createElement('div');
+    row.className = 'lb-row';
+    const initials = entry.name.split(' ').map(w => w[0]).join('').replace('🎓','').slice(0, 2).toUpperCase();
+    row.innerHTML = `
+      <div class="lb-rank ${rankClass[i] || ''}">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</div>
+      <div class="lb-avatar" style="background:${entry.color}20;color:${entry.color}">${initials}</div>
+      <div style="flex:1"><div class="lb-name">${entry.name}</div><div class="lb-sub">Level ${Math.floor(entry.score / 100) + 1} Explorer</div></div>
+      <div class="lb-stars">⭐ ${entry.score.toLocaleString()}</div>
+    `;
+    table.appendChild(row);
+  });
+}
+
+// ===== BOOT =====
+initLeaderboard();
+</script>
+</body>
+</html>
